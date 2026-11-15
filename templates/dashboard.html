@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block title %}Dataset Insights · CustomerIQ{% endblock %}
+
+{% block content %}
+<section class="dash-hero">
+  <span class="eyebrow">Dataset insights</span>
+  <p>A quick look at the {{ stats.total_customers }} customers powering CustomerIQ's model.</p>
+</section>
+
+<section class="kpi-grid">
+  <div class="kpi">
+    <span class="kpi-label">Customers</span>
+    <span class="kpi-value">{{ stats.total_customers }}</span>
+  </div>
+  <div class="kpi">
+    <span class="kpi-label">Avg. spend</span>
+    <span class="kpi-value">${{ stats.avg_spend }}</span>
+  </div>
+  <div class="kpi">
+    <span class="kpi-label">Avg. items / customer</span>
+    <span class="kpi-value">{{ stats.avg_items }}</span>
+  </div>
+  <div class="kpi">
+    <span class="kpi-label">Avg. rating</span>
+    <span class="kpi-value">{{ stats.avg_rating }} / 5</span>
+  </div>
+</section>
+
+<section class="dash-grid">
+  <div class="card">
+    <div class="card-header">
+      <h2>Satisfaction breakdown</h2>
+      <p>Class balance in the training set.</p>
+    </div>
+    {% set total = stats.total_customers %}
+    {% for label, count in stats.satisfaction_counts.items() %}
+    <div class="prob-row">
+      <div class="prob-label">
+        <span>{{ label }}</span>
+        <span>{{ count }} ({{ ((count / total) * 100) | round(1) }}%)</span>
+      </div>
+      <div class="bar"><div class="bar-fill" style="width: {{ ((count / total) * 100) | round(1) }}%"></div></div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h2>Membership distribution</h2>
+      <p>How customers split across tiers.</p>
+    </div>
+    {% for label, count in stats.membership_counts.items() %}
+    <div class="prob-row">
+      <div class="prob-label">
+        <span>{{ label }}</span>
+        <span>{{ count }}</span>
+      </div>
+      <div class="bar"><div class="bar-fill" style="width: {{ ((count / total) * 100) | round(1) }}%"></div></div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h2>Cities</h2>
+      <p>Top markets in the dataset.</p>
+    </div>
+    {% for label, count in stats.city_counts.items() %}
+    <div class="prob-row">
+      <div class="prob-label">
+        <span>{{ label }}</span>
+        <span>{{ count }}</span>
+      </div>
+      <div class="bar"><div class="bar-fill" style="width: {{ ((count / total) * 100) | round(1) }}%"></div></div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h2>Avg. spend by membership</h2>
+      <p>Higher tiers, higher tickets.</p>
+    </div>
+    {% set max_spend = stats.spend_by_membership.values() | max %}
+    {% for label, value in stats.spend_by_membership.items() %}
+    <div class="prob-row">
+      <div class="prob-label">
+        <span>{{ label }}</span>
+        <span>${{ value }}</span>
+      </div>
+      <div class="bar"><div class="bar-fill" style="width: {{ ((value / max_spend) * 100) | round(1) }}%"></div></div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="card span-2">
+    <div class="card-header">
+      <h2>Feature importances</h2>
+    </div>
+    {% for name, importance in metadata.feature_importances %}
+    <div class="prob-row">
+      <div class="prob-label">
+        <span>{{ name }}</span>
+        <span>{{ (importance * 100) | round(2) }}%</span>
+      </div>
+      <div class="bar"><div class="bar-fill" style="width: {{ (importance * 100) | round(2) }}%"></div></div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

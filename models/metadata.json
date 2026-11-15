@@ -1,0 +1,147 @@
+{
+  "feature_columns": [
+    "Age",
+    "Total Spend",
+    "Items Purchased",
+    "Average Rating",
+    "Days Since Last Purchase",
+    "Gender",
+    "City",
+    "Membership Type",
+    "Discount Applied"
+  ],
+  "numeric_features": [
+    "Age",
+    "Total Spend",
+    "Items Purchased",
+    "Average Rating",
+    "Days Since Last Purchase"
+  ],
+  "categorical_features": [
+    "Gender",
+    "City",
+    "Membership Type",
+    "Discount Applied"
+  ],
+  "target_classes": [
+    "Neutral",
+    "Satisfied",
+    "Unsatisfied"
+  ],
+  "category_choices": {
+    "Gender": [
+      "Female",
+      "Male"
+    ],
+    "City": [
+      "Chicago",
+      "Houston",
+      "Los Angeles",
+      "Miami",
+      "New York",
+      "San Francisco"
+    ],
+    "Membership Type": [
+      "Bronze",
+      "Gold",
+      "Silver"
+    ],
+    "Discount Applied": [
+      "No",
+      "Yes"
+    ]
+  },
+  "metrics": {
+    "accuracy": 1.0,
+    "classification_report": {
+      "Neutral": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 22.0
+      },
+      "Satisfied": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 25.0
+      },
+      "Unsatisfied": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 23.0
+      },
+      "accuracy": 1.0,
+      "macro avg": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 70.0
+      },
+      "weighted avg": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 70.0
+      }
+    },
+    "confusion_matrix": [
+      [
+        22,
+        0,
+        0
+      ],
+      [
+        0,
+        25,
+        0
+      ],
+      [
+        0,
+        0,
+        23
+      ]
+    ]
+  },
+  "feature_importances": [
+    [
+      "Total Spend",
+      0.24020383914000065
+    ],
+    [
+      "Days Since Last Purchase",
+      0.20058430225303467
+    ],
+    [
+      "Discount Applied",
+      0.1619425946218395
+    ],
+    [
+      "Items Purchased",
+      0.12971298079948107
+    ],
+    [
+      "Average Rating",
+      0.1194782146526811
+    ],
+    [
+      "City",
+      0.08131181994023458
+    ],
+    [
+      "Age",
+      0.06152174063953761
+    ],
+    [
+      "Membership Type",
+      0.004544103529786572
+    ],
+    [
+      "Gender",
+      0.0007004044234042803
+    ]
+  ],
+  "n_samples": 348,
+  "class_distribution": {}
+}

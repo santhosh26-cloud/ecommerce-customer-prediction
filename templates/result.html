@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Prediction Result · CustomerIQ{% endblock %}
+
+{% block content %}
+<section class="result-wrap">
+  <div class="result-card pred-{{ prediction | lower }}">
+    <span class="result-eyebrow">Prediction</span>
+    <h1>{{ prediction }}</h1>
+    <p class="result-confidence">Model confidence: <strong>{{ confidence }}%</strong></p>
+
+    <div class="probs">
+      {% for cls, prob in probabilities.items() %}
+      <div class="prob-row">
+        <div class="prob-label">
+          <span>{{ cls }}</span>
+          <span>{{ prob }}%</span>
+        </div>
+        <div class="bar"><div class="bar-fill" style="width: {{ prob }}%"></div></div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h2>Recommended next actions</h2>
+    </div>
+    <ul class="reco-list">
+      {% for tip in recommendations %}
+      <li>
+        <span class="reco-bullet"></span>
+        <span>{{ tip }}</span>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h2>Submitted inputs</h2>
+    </div>
+    <div class="kv-grid">
+      {% for k, v in input_data.items() %}
+      <div class="kv">
+        <span class="kv-key">{{ k }}</span>
+        <span class="kv-val">{{ v }}</span>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="result-actions">
+    <a class="btn btn-primary" href="{{ url_for('index') }}">Run another prediction</a>
+    <a class="btn btn-ghost" href="{{ url_for('dashboard') }}">View dashboard</a>
+  </div>
+</section>
+{% endblock %}

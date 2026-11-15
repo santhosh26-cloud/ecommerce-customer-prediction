@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block title %}Predict Customer Satisfaction · CustomerIQ{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <div class="hero-text">
+    <span class="eyebrow">Machine learning · Random Forest</span>
+    <h1>Predict <span class="grad">customer satisfaction</span> in real time.</h1>
+    <p>Feed a customer's profile into the model and CustomerIQ will tell you whether they'll be
+      <strong>Satisfied</strong>, <strong>Neutral</strong> or <strong>Unsatisfied</strong> – plus
+      targeted recommendations to act on the prediction.</p>
+
+    <div class="hero-stats">
+      <div class="stat">
+        <span class="stat-value">{{ metadata.n_samples }}</span>
+        <span class="stat-label">Training rows</span>
+      </div>
+      <div class="stat">
+        <span class="stat-value">{{ (metadata.metrics.accuracy * 100) | round(1) }}%</span>
+        <span class="stat-label">Test accuracy</span>
+      </div>
+      <div class="stat">
+        <span class="stat-value">{{ target_classes | length }}</span>
+        <span class="stat-label">Outcome classes</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-card">
+    <h3>Top drivers of satisfaction</h3>
+    <ul class="feature-list">
+      {% for name, importance in metadata.feature_importances[:5] %}
+      <li>
+        <div class="feature-row">
+          <span>{{ name }}</span>
+          <span class="feature-val">{{ (importance * 100) | round(1) }}%</span>
+        </div>
+        <div class="bar"><div class="bar-fill" style="width: {{ (importance * 100) | round(1) }}%"></div></div>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+
+<section class="card form-card">
+  <div class="card-header">
+    <h2>Customer details</h2>
+    <p>Fill in the fields below to get a satisfaction prediction.</p>
+  </div>
+
+  <form id="predict-form" action="{{ url_for('predict') }}" method="POST" class="form-grid">
+    <div class="field">
+      <label for="Age">Age</label>
+      <input type="number" id="Age" name="Age" min="18" max="100" step="1" value="32" required />
+    </div>
+
+    <div class="field">
+      <label for="Gender">Gender</label>
+      <select id="Gender" name="Gender" required>
+        {% for g in choices["Gender"] %}<option value="{{ g }}">{{ g }}</option>{% endfor %}
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="City">City</label>
+      <select id="City" name="City" required>
+        {% for c in choices["City"] %}<option value="{{ c }}">{{ c }}</option>{% endfor %}
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="Membership Type">Membership Type</label>
+      <select id="Membership Type" name="Membership Type" required>
+        {% for m in choices["Membership Type"] %}<option value="{{ m }}">{{ m }}</option>{% endfor %}
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="Total Spend">Total Spend (USD)</label>
+      <input type="number" id="Total Spend" name="Total Spend" min="0" step="0.01" value="950" required />
+    </div>
+
+    <div class="field">
+      <label for="Items Purchased">Items Purchased</label>
+      <input type="number" id="Items Purchased" name="Items Purchased" min="0" step="1" value="12" required />
+    </div>
+
+    <div class="field">
+      <label for="Average Rating">Average Rating (1-5)</label>
+      <input type="number" id="Average Rating" name="Average Rating" min="1" max="5" step="0.1" value="4.2" required />
+    </div>
+
+    <div class="field">
+      <label for="Days Since Last Purchase">Days Since Last Purchase</label>
+      <input type="number" id="Days Since Last Purchase" name="Days Since Last Purchase" min="0" step="1" value="20" required />
+    </div>
+
+    <div class="field">
+      <label for="Discount Applied">Discount Applied</label>
+      <select id="Discount Applied" name="Discount Applied" required>
+        {% for d in choices["Discount Applied"] %}<option value="{{ d }}">{{ d }}</option>{% endfor %}
+      </select>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">
+        <span>Predict Satisfaction</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+      </button>
+      <button type="button" id="ajax-predict" class="btn btn-ghost">Predict inline</button>
+    </div>
+  </form>
+
+  <div id="ajax-result" class="ajax-result hidden"></div>
+</section>
+{% endblock %}
